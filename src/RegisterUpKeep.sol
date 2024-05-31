@@ -27,7 +27,7 @@ contract RegisterUpkeep {
     )
     */
    bytes4 private constant FUNC_SELECTOR = bytes4(keccak256("register(string,bytes,address,uint32,address,bytes,uint96,uint8)"));
-   uint public minFundingAmount = 5000000000000000000; //5 LINK
+   uint public minFundingAmount = 4e18; //4 LINK
    uint8 public SOURCE = 110;
 
    //Note: make sure to fund with LINK before calling createUpkeep
