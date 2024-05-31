@@ -33,18 +33,16 @@ contract PegSwap {
     }
     
     // Swap USDC -> WETH -> LINK 
+    // to get the best deal of Link token 
+    // 30$ usdc > swap to Weth > 0.02818 Wth > swap eth to LINK > 5.74136502 LINK 
     function swap(
-        address _tokenIn,
-        address _tokenOut,
         uint256 _amountIn,
-        uint256 _amountOut
+        uint256 _amountOutMin
     ) external {
 
         bool success = usdc.transferFrom(msg.sender, address(this), _amountIn);
-        if(!success){
-            revert FailedSwap();
-            usdc.approve(address(router), _amountIn);
-        }
+        if(!success) revert FailedSwap();
+        usdc.approve(address(router), _amountIn);
 
         address[] memory path = new address[](3);
         path[0] = USDC;
@@ -53,7 +51,7 @@ contract PegSwap {
 
         router.swapExactTokensForTokens(
           _amountIn,
-          _amountOut,
+          _amountOutMin,
           path,
           address(i_reg), // Found the RegisterUpkeep contract with Link token
           block.timestamp
