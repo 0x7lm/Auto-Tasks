@@ -1,66 +1,63 @@
-## Foundry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
-Foundry consists of:
+# AutomatedTasksWithSubscription Service
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+AutomatedTasksWithSubscription is a decentralized service that allows developers to easily schedule and execute automated tasks on the blockchain. With subscription management integrated, users can seamlessly manage their subscriptions and automate tasks based on their requirements.
 
-## Documentation
+## Features
 
-https://book.getfoundry.sh/
+- **Subscription Management**: Users can subscribe to the service and extend their subscriptions to access automated task scheduling functionality.
+- **Flexible Task Scheduling**: Developers can schedule automated tasks by specifying the time interval, target contract address, and encoded function call data.
+- **Efficient Upkeep Mechanism**: The service efficiently checks for and performs upkeep on scheduled tasks, ensuring timely execution.
+- **Decentralized and Secure**: Built on blockchain technology, the service is decentralized and secure, providing trustless automation capabilities.
+
+## Getting Started
+
+To get started with the AutomatedTasksWithSubscription service, follow these steps:
+
+1. **Subscription**: Subscribe to the service by calling the `subscribe` function and sending the required payment.
+2. **Task Scheduling**: Schedule automated tasks by calling the `scheduleTask` function and specifying the task parameters.
+3. **Upkeep**: Use the `checkUpkeep` and `performUpkeep` functions to check for and perform upkeep on scheduled tasks.
+4. **Subscription Management**: Extend your subscription using the `extendSubscription` function to continue accessing the service.
 
 ## Usage
 
-### Build
+Here's an example of how to use the AutomatedTasksWithSubscription service:
 
-```shell
-$ forge build
+```solidity
+// Solidity example
+contract MyContract {
+    IAutomatedTasksWithSubscription public service;
+
+    constructor(address _serviceAddress) {
+        service = IAutomatedTasksWithSubscription(_serviceAddress);
+    }
+
+    function subscribeToService() external payable {
+        service.subscribe{value: msg.value}();
+    }
+
+    // Schedule a task to call a function on another contract every 24 hours
+    function scheduleTask(address _target, bytes calldata _data) external {
+        uint256 interval = 24 hours;
+        service.scheduleTask(interval, _target, _data);
+    }
+}
 ```
 
-### Test
+## Requirements
 
-```shell
-$ forge test
-```
+- **Ethereum Wallet**: You'll need an Ethereum wallet (e.g., MetaMask) to interact with the service.
+- **Etherscan**: You can use Etherscan to explore the contract and view transaction details.
+- **Ether (ETH)**: Subscription payments and gas fees are required for interacting with the service.
 
-### Format
+## Support
 
-```shell
-$ forge fmt
-```
+If you have any questions or need assistance, feel free to reach out to us:
 
-### Gas Snapshots
+- Email: [contact@example.com](mailto:contact@example.com)
+- Twitter: [@AutomatedTasks](https://twitter.com/AutomatedTasks)
 
-```shell
-$ forge snapshot
-```
+## License
 
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
