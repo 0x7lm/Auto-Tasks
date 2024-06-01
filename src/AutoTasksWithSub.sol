@@ -8,8 +8,16 @@ import {Check }  from "./chack.sol";
 /**
  * @dev Contract for scheduling automated tasks with subscription management.
  */
+
+/**
+ * @title Simplified Chainlink Automated Tasks
+ * @author audit4me https://github.com/audit4me
+ * @notice You can automate your functions without any conflicts.
+ *  Just a few inputs.
+ */
 contract AutoTasksWithSub {
     
+
     PegSwap private uni;
     Check private check;
     RegisterUpkeep private reg;

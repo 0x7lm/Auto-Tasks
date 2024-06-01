@@ -62,6 +62,6 @@ Why did the developer break up with Git?
 
 Because they had too many unresolved conflicts! 😄
 
-But fear not, with Chainlink Automated Tasks, you can automate your functions without any conflicts. Just a few inputs, and you're good to go! Say goodbye to manual interventions and hello to seamless automation.
+But fear not, with Simplified Chainlink Automated Tasks, you can automate your functions without any conflicts. Just a few inputs, and you're good to go! Say goodbye to manual interventions and hello to seamless automation.
 
 Let's automate the future 🚀✨
