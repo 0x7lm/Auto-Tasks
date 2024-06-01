@@ -1,63 +1,67 @@
+# Simplified Chainlink Automated Tasks
 
+Automating tasks on the blockchain can be complex, especially when integrating with Chainlink functions. This project simplifies the process, allowing developers to automate functions on the blockchain with just a few inputs.
 
-# AutomatedTasksWithSubscription Service
+## Overview
 
-AutomatedTasksWithSubscription is a decentralized service that allows developers to easily schedule and execute automated tasks on the blockchain. With subscription management integrated, users can seamlessly manage their subscriptions and automate tasks based on their requirements.
+The `AutoTasksWithSub` contract streamlines the automation process by abstracting away the complexities of integrating with Chainlink. With this contract, developers can automate tasks on the blockchain using Chainlink functions with ease. Here's how it works:
 
-## Features
+1. **Simplified Automation**: Developers can automate functions on the blockchain by providing just five inputs: the address of the contract to automate, the upkeep name, the function signature, the function arguments, and the interval for task execution.
 
-- **Subscription Management**: Users can subscribe to the service and extend their subscriptions to access automated task scheduling functionality.
-- **Flexible Task Scheduling**: Developers can schedule automated tasks by specifying the time interval, target contract address, and encoded function call data.
-- **Efficient Upkeep Mechanism**: The service efficiently checks for and performs upkeep on scheduled tasks, ensuring timely execution.
-- **Decentralized and Secure**: Built on blockchain technology, the service is decentralized and secure, providing trustless automation capabilities.
+2. **Seamless Funding**: The contract handles funding automatically. Developers don't need to deal with Chainlink tokens directly. Instead, they can fund the automation process with USDC, simplifying the funding process.
 
-## Getting Started
-
-To get started with the AutomatedTasksWithSubscription service, follow these steps:
-
-1. **Subscription**: Subscribe to the service by calling the `subscribe` function and sending the required payment.
-2. **Task Scheduling**: Schedule automated tasks by calling the `scheduleTask` function and specifying the task parameters.
-3. **Upkeep**: Use the `checkUpkeep` and `performUpkeep` functions to check for and perform upkeep on scheduled tasks.
-4. **Subscription Management**: Extend your subscription using the `extendSubscription` function to continue accessing the service.
+3. **Automated Upkeep**: The contract takes care of creating and managing upkeeps for the automated tasks, ensuring smooth and continuous execution without manual intervention.
 
 ## Usage
 
-Here's an example of how to use the AutomatedTasksWithSubscription service:
+To automate a function using the `AutoTasksWithSub` contract, follow these simple steps:
+
+1. Call the `createAutomation` function with the required inputs: the address of the contract to automate, the upkeep name, the function signature, the function arguments, and the interval for task execution.
+2. Fund the automation process by sending USDC to the contract. The contract will handle the rest, including swapping USDC for LINK tokens and setting up the upkeep.
+
+## Automate Your Custem Functions
+
+With AutoTasksWithSub, you can easily automate your own custom functions to execute at specific times. Here's how:
+
+1. Write your custom function in your contract and make it `public`.
+2. After deploying your contract, note down the function signature (e.g., `myFunction(uint256 arg1, string memory arg2)`) and the time you want it to be called.
+3. Add the function signature to the `_fnSignature` parameter when calling `createAutomation` in the `AutoTasksWithSub` contract.
+4. Specify the desired interval for your function to be executed.
+
+Now sit back and watch your function execute automatically according to your specified schedule!
+
+
+## Example
+
+Here's an example of how to automate a function using the `AutoTasksWithSub` contract:
 
 ```solidity
-// Solidity example
-contract MyContract {
-    IAutomatedTasksWithSubscription public service;
+// Instantiate the AutoTasksWithSub contract
+IAutoTasksWithSub autoTasks = IAutoTasksWithSub(<AutoTasksWithSub_Address>);
 
-    constructor(address _serviceAddress) {
-        service = IAutomatedTasksWithSubscription(_serviceAddress);
-    }
+// Specify the parameters for automation
+address contractToAutomate = <ContractToAutomate_Address>;
+string memory upkeepName = "Example Upkeep";
+string memory fnSignature = "exampleFunction(uint256)";
+string[] memory args = ["123", "HI"];
+uint256 interval = 86400; // 1 day in seconds
 
-    function subscribeToService() external payable {
-        service.subscribe{value: msg.value}();
-    }
-
-    // Schedule a task to call a function on another contract every 24 hours
-    function scheduleTask(address _target, bytes calldata _data) external {
-        uint256 interval = 24 hours;
-        service.scheduleTask(interval, _target, _data);
-    }
-}
+// Call the createAutomation function to automate the task 
+autoTasks.createAutomation{value: <USDC_Amount>}(
+    contractToAutomate, 
+    upkeepName, 
+    fnSignature, 
+    args, 
+    interval
+);
 ```
 
-## Requirements
+## Developer Fun
 
-- **Ethereum Wallet**: You'll need an Ethereum wallet (e.g., MetaMask) to interact with the service.
-- **Etherscan**: You can use Etherscan to explore the contract and view transaction details.
-- **Ether (ETH)**: Subscription payments and gas fees are required for interacting with the service.
+Why did the developer break up with Git?
 
-## Support
+Because they had too many unresolved conflicts! 😄
 
-If you have any questions or need assistance, feel free to reach out to us:
+But fear not, with Chainlink Automated Tasks, you can automate your functions without any conflicts. Just a few inputs, and you're good to go! Say goodbye to manual interventions and hello to seamless automation.
 
-- Email: [contact@example.com](mailto:contact@example.com)
-- Twitter: [@AutomatedTasks](https://twitter.com/AutomatedTasks)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Let's automate the future 🚀✨
