@@ -61,3 +61,6 @@ Why don't blockchain developers tell secrets on the blockchain?
 Because it's a public ledger!
 
 Let's automate the future 🚀✨
+```
+AutoTasksWithSub@0x5048Fb70377328796b08c7Eca067e4Cb5Be2B2e6
+```
