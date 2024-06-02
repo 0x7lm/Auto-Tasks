@@ -50,7 +50,7 @@ contract PegSwap {
         uint256 ethAmountOutMin,
         uint256 linkShare,
         uint256 ethShare
-    ) external {
+    ) external payable {
         // Transfer USDC from the user to the contract
         bool success = usdc.transferFrom(msg.sender, address(this), amountIn);
         if (!success) revert FailedSwap();
