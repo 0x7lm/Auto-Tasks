@@ -36,7 +36,7 @@ contract AutoTasksWithSub {
 
     // Constants
     uint256 private constant USDC_SUB_FEE = 30e6;      // 30 USDC (6 decimals)
-    uint256 private constant ETH_OUT = 5e16;           // 0.05 ETH in wei
+    uint256 private constant ETH_OUT = 10e14;           // 0.05 ETH in wei
     uint256 private constant TOTAL_SHARES = 100;       // 100% total shares
     uint256 private constant LINK_SHARE = 75;          // 75% of the fee to be swapped to LINK
     uint256 private constant ETH_SHARE = 25;           // 25% of the fee to be swapped to ETH
