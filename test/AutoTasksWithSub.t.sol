@@ -27,6 +27,7 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
     address private constant UNISWAP_V2_ROUTER = 0x86dcd3293C53Cf8EFd7303B57beb2a3F671dDE98;
 
     address constant user = address(1); 
+    address constant bob = address(3);
     address constant contractToAutomate = address(2);
     string constant upkeepName = "MyUpkeep";
     string constant fnSignature = "myFunctionSignature(address,uint256)";
@@ -42,24 +43,19 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
         vm.prank(usdc.masterMinter());
         // allow this test user to mint USDC
         usdc.configureMinter(address(this), type(uint256).max);
-        
-        // Approve $1000 USDC to the test user
-        usdc.approve(address(user), 1000e6);
+        // mint $1000 USDC to the test user
+        usdc.mint(address(user), 40e6);
+        usdc.mint(address(bob), 10e6);
     }
 
     function testBalance() public {
         // verify the test contract has $1000 USDC
         uint256 balance = usdc.balanceOf(address(user));
-        assertEq(balance, 1000e6);
+        assertEq(balance, 40e6);
     }
 
-    function testSwapAndFund() public {
-        vm.startPrank(user);
-        testCreateAutomation();
-        vm.stopPrank();
-    }    
-
     function testCreateAutomation() public {
+        vm.startPrank(user);
         bool success = autoTasks.createAutomation(
             contractToAutomate,
             upkeepName,
@@ -76,10 +72,11 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
         assertEq(params.args[0], args[0]);
         assertEq(params.args[1], args[1]);
         assertEq(params.interval, interval);
+        vm.stopPrank();
     }
 
     function testFailCreateAutomationInsufficientFee() public {
-        vm.startPrank(user);
+        vm.startPrank(bob);
         vm.expectRevert();
         autoTasks.createAutomation(
             contractToAutomate,
