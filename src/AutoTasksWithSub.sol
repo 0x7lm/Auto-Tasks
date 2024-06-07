@@ -77,7 +77,7 @@ contract AutoTasksWithSub {
         string memory _fnSignature,
         string[] memory _args,
         uint256 _interval
-    ) public payable returns (bool) {
+    ) public returns (bool) {
 
         if (
             parameters[msg.sender].contractToAutomate != address(0) ||
@@ -86,7 +86,7 @@ contract AutoTasksWithSub {
             users.push(msg.sender);
         }
 
-        if (msg.value != USDC_SUB_FEE) revert InsufficientFee();
+        //if ( != USDC_SUB_FEE) revert InsufficientFee();
 
         Parameters memory params = Parameters({
             contractToAutomate: _contractToAutomate,
@@ -128,7 +128,7 @@ contract AutoTasksWithSub {
             Parameters storage params = parameters[users[i]];
             if (!params.isAutomated) {
                 // Perform the swap and fund operation
-                uni.swapAndFund{value: msg.value}(USDC_SUB_FEE, LINK_FUNDS_AMOUNT, ETH_OUT, LINK_SHARE, ETH_SHARE);
+                uni.swapAndFund(USDC_SUB_FEE, LINK_FUNDS_AMOUNT, ETH_OUT, LINK_SHARE, ETH_SHARE);
 
                 // Register the upkeep
                 reg.createUpkeep(_contractToAutomate, _upkeepName, GAS_LIMIT);

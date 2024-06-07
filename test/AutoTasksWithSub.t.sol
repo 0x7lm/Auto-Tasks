@@ -27,6 +27,7 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
     address private constant UNISWAP_V2_ROUTER = 0x86dcd3293C53Cf8EFd7303B57beb2a3F671dDE98;
 
     address constant user = address(1); 
+    address constant bob = address(3);
     address constant contractToAutomate = address(2);
     string constant upkeepName = "MyUpkeep";
     string constant fnSignature = "myFunctionSignature(address,uint256)";
@@ -52,7 +53,8 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
         usdc.configureMinter(address(this), type(uint256).max);
         
         // mint $1000 USDC to the test user
-        usdc.mint(address(user), 1000e6);
+        usdc.mint(address(user), 40e6);
+        usdc.mint(address(bob), 20e6);
         //usdc.mint(address(pegSwap),40e6);
         // usdc.approve(address(pegSwap),40e6);
     }
@@ -60,29 +62,19 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
     function testBalance() public {
         // verify the test contract has $1000 USDC
         uint256 balance = usdc.balanceOf(address(user));
-        assertEq(balance, 1000e6);
+        uint256 bobBalance =  usdc.balanceOf(bob);
+        assertEq(balance, 40e6);
+        assertEq(bobBalance, 20e6);
     }
 
     function testSwapAndFund() public {
         vm.startPrank(user);
-        // Swap USDC -> ETH -> LINK
-        uint256 usdcAmountIn = 40e6;
-        usdc.approve(address(pegSwap), usdcAmountIn);
-        uint256 pegSwapBalance = usdc.balanceOf(address(pegSwap));
-        uint256 linkAmountOutMin = 2e18;     // 2 link token
-        uint256 ethAmountOutMin = 10e14;  // 5 usd
-        uint256 linkShare = 25;           // 25% of 30 USDC
-        uint256 ethShare = 5;             // 5% of 30 USDC
-        //pegSwap.swapAndFund(usdcAmountIn, linkAmountOutMin, ethAmountOutMin, linkShare, ethShare);
-        
         testCreateAutomation();
-        assertEq(pegSwapBalance, usdcAmountIn);
         vm.stopPrank();
     }    
 
     function testCreateAutomation() public {
-        vm.startPrank(user);
-        bool success = autoTasks.createAutomation{value: 40e6}(
+        bool success = autoTasks.createAutomation(
             contractToAutomate,
             upkeepName,
             fnSignature,
@@ -98,13 +90,12 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
         assertEq(params.args[0], args[0]);
         assertEq(params.args[1], args[1]);
         assertEq(params.interval, interval);
-        vm.stopPrank();
     }
 
     function testFailCreateAutomationInsufficientFee() public {
-        vm.startPrank(user);
+        vm.startPrank(bob);
         vm.expectRevert();
-        autoTasks.createAutomation{value: 1 ether}(
+        autoTasks.createAutomation(
             contractToAutomate,
             upkeepName,
             fnSignature,
