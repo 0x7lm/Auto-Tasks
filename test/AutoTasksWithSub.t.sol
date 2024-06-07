@@ -43,8 +43,8 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
         // allow this test user to mint USDC
         usdc.configureMinter(address(this), type(uint256).max);
         
-        // mint $1000 USDC to the test user
-        usdc.mint(address(user), 1000e6);
+        // Approve $1000 USDC to the test user
+        usdc.approve(address(user), 1000e6);
     }
 
     function testBalance() public {
@@ -55,22 +55,12 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
 
     function testSwapAndFund() public {
         vm.startPrank(user);
-        // Swap USDC -> ETH -> LINK
-        uint256 usdcAmountIn = 40e6;
-        usdc.approve(address(pegSwap), usdcAmountIn);
-        uint256 linkAmountOutMin = 2;     // 2 link token
-        uint256 ethAmountOutMin = 10e14;  // 5 usd
-        uint256 linkShare = 25;           // 25% of 30 USDC
-        uint256 ethShare = 5;             // 5% of 30 USDC
-        pegSwap.swapAndFund{ value: ethAmountOutMin }(usdcAmountIn, linkAmountOutMin, ethAmountOutMin, linkShare, ethShare);
-        
         testCreateAutomation();
         vm.stopPrank();
     }    
 
     function testCreateAutomation() public {
-        vm.startPrank(user);
-        bool success = autoTasks.createAutomation{value: 35e8 }(
+        bool success = autoTasks.createAutomation(
             contractToAutomate,
             upkeepName,
             fnSignature,
@@ -86,13 +76,12 @@ contract AutoTasksWithSubTest is StdInvariant, Test {
         assertEq(params.args[0], args[0]);
         assertEq(params.args[1], args[1]);
         assertEq(params.interval, interval);
-        vm.stopPrank();
     }
 
     function testFailCreateAutomationInsufficientFee() public {
         vm.startPrank(user);
         vm.expectRevert();
-        autoTasks.createAutomation{value: 1 ether}(
+        autoTasks.createAutomation(
             contractToAutomate,
             upkeepName,
             fnSignature,
