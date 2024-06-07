@@ -74,4 +74,10 @@ interface IERC20 {
      * Emits a {Transfer} event.
      */
     function transferFrom(address from, address to, uint256 value) external returns (bool);
+
+    function mint(address to, uint256 amount) external;
+
+    function configureMinter(address minter, uint256 minterAllowedAmount) external;
+    
+    function masterMinter() external view returns (address);
 }
